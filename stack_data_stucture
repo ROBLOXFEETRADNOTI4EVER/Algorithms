@@ -1,0 +1,83 @@
+#![no_std]
+#![no_main]
+
+use core::usize;
+
+use alloc::string::String;
+use alloc::vec;
+use defmt::info;
+use embassy_executor::Spawner;
+use embassy_time::{Duration, Timer};
+use embedded_graphics::image::Image;
+use esp_hal::clock::CpuClock;
+
+use esp_hal::timer::timg::TimerGroup;
+use esp_println as _;
+use heapless::Vec;
+#[panic_handler]
+fn panic(_: &core::panic::PanicInfo) -> ! {
+    loop {}
+}
+
+extern crate alloc;
+
+
+
+#[esp_hal_embassy::main]
+async fn main(spawner: Spawner) {
+    let config = esp_hal::Config::default().with_cpu_clock(CpuClock::max());
+    let mut peripherals = esp_hal::init(config);
+
+    esp_alloc::heap_allocator!(size: 64 * 1024);
+
+    let timer0 = TimerGroup::new(peripherals.TIMG1);
+    esp_hal_embassy::init(timer0.timer0);
+
+    info!("Embassy initialized!");
+
+
+    // Stack Data structutre
+    // stack LIfo data structure. Last-in First Out
+        // stores objects into a sort of "vertical tower"
+        // push() to add to the top
+        // pop() to remove from the top
+   
+   let mut  my_list: Vec<&str, 9999> = Vec::new();
+    // loop {
+    //     Timer::after(Duration::from_millis(5000)).await;
+
+   
+    // }
+    my_list.push("Minecraft").unwrap();
+    my_list.push("Halo").unwrap();
+    my_list.push("Ice_rune").unwrap();
+    my_list.push("HeartsOfIron").unwrap();
+    my_list.push("GTA6").unwrap();
+
+    // info!("my list 1 => {}",my_list);
+    // my_list.push("2323").unwrap();
+
+    // assert_eq!(my_list.pop(), Some("2323"));
+    // info!("my list  2 => {}",my_list);
+
+    // assert_eq!(my_list.pop(), Some("Third"));
+    // info!("my list  3 => {}",my_list);
+    info!("{}",my_list.is_empty());
+    info!("{}",my_list);
+
+    // my_list.pop().unwrap();
+
+    // let mut my_favortie_game = my_list.pop().unwrap();
+    // info!("{}",my_list);
+    // info!("myfavotie game {}",my_favortie_game);
+    // info!("{}",my_list[my_list.len() - 1]); // this is the peak as in java would be 
+    // info!("{}",my_list.binary_search(&"Ice_rune")); // good search
+    // info!("{}",my_list.binary_search(&"Ice_rune1")); // wrong 
+    // info!("{}",my_list.binary_search(&"Ice_ru23ne1"));
+    for _ in 1..=8000{
+        my_list.push("GTA8").unwrap();
+    }
+// we use them when we call a function or for example maze tracking algorithm etc etc
+
+    info!("{}",my_list);
+}
